@@ -1,0 +1,1 @@
+23 14 * * * env DISPLAY=:0 java -jar /home/alecsnyder/Documents/Java/shutdown.jar 
