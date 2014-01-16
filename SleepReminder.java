@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.Runtime;
 public class SleepReminder implements ActionListener
 {
   public JFrame frame;
@@ -26,8 +27,18 @@ public class SleepReminder implements ActionListener
   }
   public void actionPerformed(ActionEvent e)
   {
+    try
+    {
+        Process p=new ProcessBuilder("/home/alecsnyder/Documents/git/cs162/sleepTime/testScript", "Terti\\*4@p.30").start();
+        p.waitFor();
+        System.out.println("Success");
+    }
+    catch (Exception ex)
+    {
+        System.out.println("error in execution!");
+        //return 1;
+    }
     frame.dispose();
     System.exit(0);
   }
-
 }

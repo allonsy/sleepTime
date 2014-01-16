@@ -1,0 +1,5 @@
+#!/bin/bash
+#echo "$1"
+echo $1 | sudo -S /home/alecsnyder/Documents/git/cs162/sleepTime/sleep.bash $2 $3 $4
+exit 0
+
