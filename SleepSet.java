@@ -128,7 +128,7 @@ public class SleepSet implements ActionListener
             try
             {
                 
-                Process p=new ProcessBuilder("/home/alecsnyder/Documents/git/cs162/sleepTime/testScript", "\"Terti*4@p.30\"", hourStr, minStr, week).start();
+                Process p=new ProcessBuilder("/home/alecsnyder/Documents/git/cs162/sleepTime/testScript", passwd, hourStr, minStr, week).start();
                 //p.waitFor();
                 System.out.println("Success "+min+" "+hour);
             }
