@@ -10,6 +10,7 @@ public class SleepSet implements ActionListener
     public int min=0;
     public String week="1";
     public String AP="AM";
+    // passwd="passwd";   
     public JButton cancel, confirm;
     public JComboBox minsWake, hoursWake, AM, day;
     
@@ -20,15 +21,17 @@ public class SleepSet implements ActionListener
         JLabel instructions=new JLabel("Please input your wakeup time!  ");
         confirm=new JButton("Confirm");
         cancel=new JButton("Cancel");
-        String[] hours={"1","2","3","4","5","6", "7", "8", "9", "10", "11", "12"};
+        String[] hours={"Hour","1","2","3","4","5","6", "7", "8", "9", "10", "11", "12"};
         hoursWake=new JComboBox(hours);
+        hoursWake.setSelectedIndex(0);
         String[] mins=getMins();
         minsWake = new JComboBox(mins);
-        String[] AMPM={"AM", "PM"};
+        String[] AMPM={"AM/PM","AM", "PM"};
         AM=new JComboBox(AMPM);
         AM.setSelectedIndex(0);
-        String[] dayWeek={"Mon","Tues","Wed","Thurs","Fri","Sat", "Sun", "Weekdays", "Weekends", "Mon/Wed/Fri", "Tues/Thurs", "Everyday"};
+        String[] dayWeek={"Day of the Week","Mon","Tues","Wed","Thurs","Fri","Sat", "Sun", "Weekdays", "Weekends", "Mon/Wed/Fri", "Tues/Thurs", "Everyday"};
         day=new JComboBox(dayWeek);
+        day.setSelectedIndex(0);
         minsWake.addActionListener(this);
         hoursWake.addActionListener(this);
         cancel.addActionListener(this);
@@ -39,7 +42,8 @@ public class SleepSet implements ActionListener
         JLabel label2=new JLabel("   Minutes: ");
         JLabel label3=new JLabel("   AMPM: ");
         JLabel label4=new JLabel("   Day of the Week: ");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.getRootPane().setDefaultButton(confirm);
         frame.add(instructions);
         frame.add(label1);
         frame.add(hoursWake);
@@ -71,13 +75,19 @@ public class SleepSet implements ActionListener
          else if(e.getSource()==(Object)(minsWake))
          {
              JComboBox box=(JComboBox)(e.getSource());
-             min=Integer.parseInt((String)(box.getSelectedItem()));
+              if(box.getSelectedItem().equals("minute"))
+                min=0;
+             else
+                min=Integer.parseInt((String)(box.getSelectedItem()));
              //System.out.println(min+4);
          }
          else if(e.getSource()==(Object)(hoursWake))
          {
              JComboBox box=(JComboBox)(e.getSource());
-             hour=Integer.parseInt((String)(box.getSelectedItem()));
+             if(box.getSelectedItem().equals("hour"))
+                hour=8;
+             else
+                hour=Integer.parseInt((String)(box.getSelectedItem()));
              //System.out.println(hour+4);
          }
          else if(e.getSource()==(Object)(day))
@@ -110,6 +120,8 @@ public class SleepSet implements ActionListener
                                    break;
                case "Everyday":  week="1-7";
                                  break;
+               default:         week="1";
+                                break;
              
              }
          }
@@ -117,36 +129,21 @@ public class SleepSet implements ActionListener
          {
              JComboBox box=(JComboBox)(e.getSource());
              AP=(String)(box.getSelectedItem());
+             if(AP.equals("AM/PM"))
+                AP="AM";
          }
          else if(e.getSource()==(Object)(confirm))
          {
-            min=min-44;
-            hour=hour-7;
-            realizeTime();
-            String minStr=""+min;
-            String hourStr=""+hour;
-            try
-            {
-                
-                Process p=new ProcessBuilder("/home/alecsnyder/Documents/git/cs162/sleepTime/testScript", passwd, hourStr, minStr, week).start();
-                //p.waitFor();
-                System.out.println("Success "+min+" "+hour);
-            }
-            catch (Exception ex)
-            {
-                System.out.println("error in execution!");
-                //return 1;
-            }
-            frame.dispose();
-            System.exit(0);
-        }
+            new PassFrame(this);
+         }
      }
      public String[] getMins()
      {
-         String[] nums=new String[60];
-         for(int i=0; i<=59; i++)
+         String[] nums=new String[61];
+         nums[0]="minute";
+         for(int i=1; i<=60; i++)
          {
-             nums[i]=""+(i);
+             nums[i]=""+(i-1);
          }
          return nums;
      }
