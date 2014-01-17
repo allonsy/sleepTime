@@ -1,3 +1,7 @@
+/* Alec Snyder
+ * Gui frontend main class for scheduling a cron job to auto shut down 
+ * user's computer for optimal sleep
+ */
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -62,13 +66,13 @@ public class SleepSet implements ActionListener
         if(e.getSource()==(Object)(cancel))
         {
             frame.dispose();
-            System.exit(0);
+            System.exit(0); //if cancel, close program
          }
          else if(e.getSource()==(Object)(minsWake))
          {
              JComboBox box=(JComboBox)(e.getSource());
               if(box.getSelectedItem().equals("minute"))
-                min=0;
+                min=0; //get the minutes selected
              else
                 min=Integer.parseInt((String)(box.getSelectedItem()));
              //System.out.println(min+4);
@@ -77,7 +81,7 @@ public class SleepSet implements ActionListener
          {
              JComboBox box=(JComboBox)(e.getSource());
              if(box.getSelectedItem().equals("hour"))
-                hour=8;
+                hour=8; //get the hours selected
              else
                 hour=Integer.parseInt((String)(box.getSelectedItem()));
              //System.out.println(hour+4);
@@ -124,20 +128,12 @@ public class SleepSet implements ActionListener
              if(AP.equals("AM/PM"))
                 AP="AM";
          }
-         else if(e.getSource()==(Object)(appBox))
-         {
-             JComboBox box=(JComboBox)(e.getSource());
-             if(((String)(box.getSelectedItem())).equals("New Schedule"))
-                append=false;
-             else
-                append=true;
-         }
          else if(e.getSource()==(Object)(confirm))
          {
             new PassFrame(this);
          }
      }
-     public String[] getMins()
+     public String[] getMins() //auto generate the 60 minutes for the menu
      {
          String[] nums=new String[61];
          nums[0]="minute";
@@ -147,7 +143,7 @@ public class SleepSet implements ActionListener
          }
          return nums;
      }
-     public void realizeTime()
+     public void realizeTime() //after some math has been done on the time, make the time readable by cron systems
      {
          if(min<0)
          {
@@ -180,7 +176,12 @@ public class SleepSet implements ActionListener
      }
      public static void main(String[] args)
      {
-         new SleepSet();
+         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+             public void run()
+             {
+                 new SleepSet();
+             }
+         });
      }
  }   
     

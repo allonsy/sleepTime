@@ -1,3 +1,6 @@
+/* Alec Snyder
+ * Adds a frame to ask for password and if correct, execute proper cron code and scripts
+ */
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
@@ -36,12 +39,12 @@ public class PassFrame implements ActionListener
     {
         if(e.getSource()==(Object)(cancelPass))
          {
-             passFrame.dispose();
+             passFrame.dispose(); //cancel closes frame
          }
          else if(e.getSource()==(Object)(confirmPass))
          {
              String addon="";
-             if(set.appBox.getSelectedItem().equals("New Schedule"))
+             if(set.appBox.getSelectedItem().equals("New Schedule")) //if the user has chosen to create a new schedule or append old one.
                 addon="";
              else
                 addon="Append";
@@ -54,7 +57,7 @@ public class PassFrame implements ActionListener
              try
              {
                 String[] cmd = {"/bin/bash","-c","echo "+passwd+"| sudo -S ~/sleep"+addon+" "+ hourStr + " " + minStr + " " + set.week + " poweroff"}; 
-                Process p=Runtime.getRuntime().exec(cmd);
+                Process p=Runtime.getRuntime().exec(cmd); //shutdown command 
                 p.waitFor();
                 p.destroy();
                 set.min=set.min-30;
@@ -62,15 +65,11 @@ public class PassFrame implements ActionListener
                 minStr=""+set.min;
                 hourStr=""+set.hour;
                 String[] warnCmd = {"/bin/bash","-c","echo "+passwd+"| sudo -S ~/sleepAppend "+ hourStr + " " + minStr + " " + set.week + "\" wall < ~/warning.txt\""}; 
-                Runtime.getRuntime().exec(warnCmd);
-                //Process p=new ProcessBuilder("/home/alecsnyder/Documents/git/cs162/sleepTime/testScript", "\"Terti*4@p.30\"", hourStr, minStr, week).start();
-                //p.waitFor(); */
-                System.out.println("Success "+set.min+" "+set.hour);
+                Runtime.getRuntime().exec(warnCmd); //system wide warning command
             }
             catch (Exception ex)
             {
                 System.out.println("error in execution!");
-                //return 1;
             }
             set.frame.dispose();
             passFrame.dispose();
