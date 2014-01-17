@@ -10,14 +10,14 @@ public class SleepSet implements ActionListener
     public int min=0;
     public String week="1";
     public String AP="AM";
-    // passwd="passwd";   
+    public boolean append=false;   
     public JButton cancel, confirm;
-    public JComboBox minsWake, hoursWake, AM, day;
+    public JComboBox minsWake, hoursWake, AM, day, appBox;
     
     public SleepSet()
     {
         frame=new JFrame("set Your wakeup hour!");
-        frame.setLayout(new GridLayout(2,9));
+        frame.setLayout(new GridLayout(2,5));
         JLabel instructions=new JLabel("Please input your wakeup time!  ");
         confirm=new JButton("Confirm");
         cancel=new JButton("Cancel");
@@ -29,6 +29,9 @@ public class SleepSet implements ActionListener
         String[] AMPM={"AM/PM","AM", "PM"};
         AM=new JComboBox(AMPM);
         AM.setSelectedIndex(0);
+        String[] app={"New Schedule", "Add to old schedule"};
+        appBox=new JComboBox(app);
+        appBox.setSelectedIndex(0);
         String[] dayWeek={"Day of the Week","Mon","Tues","Wed","Thurs","Fri","Sat", "Sun", "Weekdays", "Weekends", "Mon/Wed/Fri", "Tues/Thurs", "Everyday"};
         day=new JComboBox(dayWeek);
         day.setSelectedIndex(0);
@@ -38,25 +41,14 @@ public class SleepSet implements ActionListener
         confirm.addActionListener(this);
         AM.addActionListener(this);
         day.addActionListener(this);
-        JLabel label1=new JLabel("   Hour: ");
-        JLabel label2=new JLabel("   Minutes: ");
-        JLabel label3=new JLabel("   AMPM: ");
-        JLabel label4=new JLabel("   Day of the Week: ");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.getRootPane().setDefaultButton(confirm);
         frame.add(instructions);
-        frame.add(label1);
         frame.add(hoursWake);
-        frame.add(label2);
         frame.add(minsWake);
-        frame.add(label3);
         frame.add(AM);
-        frame.add(label4);
         frame.add(day);
-        frame.add(new JLabel("")); //garbage
-        frame.add(new JLabel("")); //garbage
-        frame.add(new JLabel("")); //garbage
-        frame.add(new JLabel("")); //garbage
+        frame.add(appBox);
         frame.add(new JLabel("")); //garbage
         frame.add(new JLabel("")); //garbage
         frame.add(new JLabel("")); //garbage
@@ -132,6 +124,14 @@ public class SleepSet implements ActionListener
              if(AP.equals("AM/PM"))
                 AP="AM";
          }
+         else if(e.getSource()==(Object)(appBox))
+         {
+             JComboBox box=(JComboBox)(e.getSource());
+             if(((String)(box.getSelectedItem())).equals("New Schedule"))
+                append=false;
+             else
+                append=true;
+         }
          else if(e.getSource()==(Object)(confirm))
          {
             new PassFrame(this);
@@ -156,7 +156,22 @@ public class SleepSet implements ActionListener
          }
          if(hour<0)
          {
-             hour=hour+24;
+            hour=hour+24;
+            if(week.equals("1-7"))
+                week=week;
+            else if(week.equals("1,3,5"))
+                week="7,2,4";
+            else if(week.equals("2,4"))
+                week="1,3";
+            else if(week.equals("1-5"))
+                week="1,2,3,4,7";
+            else if(week.equals("6-7"))
+                week="5,6";
+            else
+            {
+                Integer weekInt=(Integer.parseInt(week)-1);
+                week=weekInt.toString();
+            }
          }
          if(AP.equals("PM"))
          {

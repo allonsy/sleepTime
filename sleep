@@ -1,0 +1,6 @@
+#!/bin/bash
+#Alec Snyder
+echo $2 $1 "* *" $3 $4 > ~/sleep.cron
+#echo $2 $1 "* * * poweroff" >> /home/alecsnyder/Documents/cs162/sleep.cron
+sudo crontab ~/sleep.cron
+exit 0

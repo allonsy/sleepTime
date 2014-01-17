@@ -40,6 +40,11 @@ public class PassFrame implements ActionListener
          }
          else if(e.getSource()==(Object)(confirmPass))
          {
+             String addon="";
+             if(set.appBox.getSelectedItem().equals("New Schedule"))
+                addon="";
+             else
+                addon="Append";
              passwd="\""+passField.getText()+"\"";
              set.min=set.min-44;
              set.hour=set.hour-7;
@@ -48,10 +53,18 @@ public class PassFrame implements ActionListener
              String hourStr=""+set.hour;
              try
              {
-                String[] cmd = {"/bin/bash","-c","echo "+passwd+"| sudo -S ./testScript "+ hourStr + " " + minStr + " " + set.week + " "}; 
-                Runtime.getRuntime().exec(cmd); 
+                String[] cmd = {"/bin/bash","-c","echo "+passwd+"| sudo -S ~/sleep"+addon+" "+ hourStr + " " + minStr + " " + set.week + " poweroff"}; 
+                Process p=Runtime.getRuntime().exec(cmd);
+                p.waitFor();
+                p.destroy();
+                set.min=set.min-30;
+                set.realizeTime();
+                minStr=""+set.min;
+                hourStr=""+set.hour;
+                String[] warnCmd = {"/bin/bash","-c","echo "+passwd+"| sudo -S ~/sleepAppend "+ hourStr + " " + minStr + " " + set.week + "\" wall < ~/warning.txt\""}; 
+                Runtime.getRuntime().exec(warnCmd);
                 //Process p=new ProcessBuilder("/home/alecsnyder/Documents/git/cs162/sleepTime/testScript", "\"Terti*4@p.30\"", hourStr, minStr, week).start();
-                //p.waitFor();
+                //p.waitFor(); */
                 System.out.println("Success "+set.min+" "+set.hour);
             }
             catch (Exception ex)
