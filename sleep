@@ -1,1 +1,8 @@
-/home/alecsnyder/sleep
+#!/bin/bash
+#Alec Snyder
+#schedules a certain command at a certain time, replaces old schedule file
+#requires sudo priveledges
+#usage: ./sleepAppend [hour:1-24] [Minute:0-59] [dayOfWeek:1-7] [Command to be run]
+echo $2 $1 "* *" $3 $4 > ~/sleep.cron
+sudo crontab ~/sleep.cron
+exit 0
